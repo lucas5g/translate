@@ -7,7 +7,6 @@ import { Prisma } from '@prisma/client';
 @Injectable()
 export class TagService {
   create(createTagDto: CreateTagDto) {
-    console.log({ createTagDto})
     return prisma.tag.create({
       data: {
         name: createTagDto.name

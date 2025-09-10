@@ -40,9 +40,4 @@ describe('PhraseService', () => {
 
   });
 
-
-  it.only('findOneAudio', async () => {
-
-    const res = await service.findOneAudio(id)
-  })
 });

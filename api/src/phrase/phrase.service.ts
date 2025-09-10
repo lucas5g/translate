@@ -48,6 +48,9 @@ export class PhraseService {
         english,
         audio: await elevenLabs(english),
       },
+      omit: {
+        audio: true
+      }
     })
   }
 
@@ -56,16 +59,10 @@ export class PhraseService {
   }
 
   findOne(id: number) {
-    return prisma.phrase.findUnique({
+    return prisma.phrase.findUniqueOrThrow({
       where: {
         id
-      },
-      select: {
-        id: true,
-        portuguese: true,
-        english: true,
-        tags: true
-      }
+      }    
     });
   }
 

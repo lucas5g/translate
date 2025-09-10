@@ -4,12 +4,15 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { env } from './utils/env';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { version } from '../package.json'
+import { PrismaExceptionFilter } from './prisma/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true
   }))
+  .useGlobalFilters(new PrismaExceptionFilter())
+  .enableCors()
 
 
   const config = new DocumentBuilder()
