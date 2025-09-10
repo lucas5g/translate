@@ -9,38 +9,40 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PhraseService {
-  constructor(private readonly tagService: TagService) { }
+  constructor(private readonly tagService: TagService) {}
   async upsert(dto: CreatePhraseDto) {
-    const tag = await this.tagService.findOneWhere({
-      name: dto.tag
-    }) ?? await this.tagService.create({
-      name: dto.tag
-    })
+    const tag =
+      (await this.tagService.findOneWhere({
+        name: dto.tag,
+      })) ??
+      (await this.tagService.create({
+        name: dto.tag,
+      }));
 
-    const phrase = await this.findOneWhere({
-      portuguese: dto.portuguese
-    }) ?? await this.create(dto)
+    const phrase =
+      (await this.findOneWhere({
+        portuguese: dto.portuguese,
+      })) ?? (await this.create(dto));
 
     await prisma.phraseTag.upsert({
       where: {
         phraseId_tagId: {
           phraseId: phrase.id,
-          tagId: tag.id
-        }
+          tagId: tag.id,
+        },
       },
       update: {},
       create: {
         phraseId: phrase.id,
-        tagId: tag.id
-      }
-    })
+        tagId: tag.id,
+      },
+    });
 
-    return phrase
+    return phrase;
   }
 
   async create(createPhraseDto: CreatePhraseDto) {
-
-    const english = await translate(createPhraseDto.portuguese)
+    const english = await translate(createPhraseDto.portuguese);
 
     return await prisma.phrase.create({
       data: {
@@ -49,9 +51,9 @@ export class PhraseService {
         audio: await elevenLabs(english),
       },
       omit: {
-        audio: true
-      }
-    })
+        audio: true,
+      },
+    });
   }
 
   findAll() {
@@ -61,33 +63,37 @@ export class PhraseService {
   findOne(id: number) {
     return prisma.phrase.findUniqueOrThrow({
       where: {
-        id
-      }    
+        id,
+      },
     });
   }
 
-  findOneWhere(where:Prisma.PhraseWhereUniqueInput){   
+  findOneWhere(where: Prisma.PhraseWhereUniqueInput) {
     return prisma.phrase.findUnique({
-      where
-    })
+      where,
+    });
   }
 
   update(id: number, updatePhraseDto: UpdatePhraseDto) {
-    return `This action updates a #${id} phrase`;
+    return prisma.phrase.update({
+      where: {
+        id,
+      },
+      data: updatePhraseDto,
+    });
   }
 
   async remove(id: number) {
-
     await prisma.phraseTag.deleteMany({
       where: {
-        phraseId: id
-      }
-    })
+        phraseId: id,
+      },
+    });
 
     return prisma.phrase.delete({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
   }
 }

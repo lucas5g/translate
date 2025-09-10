@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Res,
+} from '@nestjs/common';
 import { PhraseService } from './phrase.service';
 import { CreatePhraseDto } from './dto/create-phrase.dto';
 import { UpdatePhraseDto } from './dto/update-phrase.dto';
@@ -25,10 +34,9 @@ export class PhraseController {
 
   @Get(':id/audio.mp3')
   async findOneAudio(@Param('id') id: string, @Res() res: Response) {
-    const { audio } = await this.phraseService.findOne(+id)
-    res.setHeader('Content-Type', 'audio/mpeg')
-    res.send(audio)
-
+    const { audio } = await this.phraseService.findOne(+id);
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.send(audio);
   }
 
   @Patch(':id')

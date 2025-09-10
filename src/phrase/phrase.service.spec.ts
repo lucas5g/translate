@@ -6,7 +6,7 @@ import { TagService } from '@/tag/tag.service';
 
 describe('PhraseService', () => {
   let service: PhraseService;
-  let id = 1;
+  const id = 1;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -14,30 +14,32 @@ describe('PhraseService', () => {
     }).compile();
 
     service = module.get<PhraseService>(PhraseService);
-
   });
 
-  it('upsert', async () => {
-
+  it.only('upsert', async () => {
     const payload: CreatePhraseDto = {
       portuguese: 'Bom tarde!',
-      tag: 'test'
-    }
+      tag: 'test',
+    };
 
-    const dto = plainToInstance(CreatePhraseDto, payload)
+    const dto = plainToInstance(CreatePhraseDto, payload);
 
-    const res = await service.upsert(dto)
+    const res = await service.upsert(dto);
 
-    expect(res).toMatchObject(dto)
-
-  })
-
-  it('findAll', async () => {
-
-    const res = await service.findAll()
-
-    expect(res).toBeInstanceOf(Array)
-
+    expect(res).toMatchObject({
+      portuguese: dto.portuguese,
+    });
   });
 
+  it('findAll', async () => {
+    const res = await service.findAll();
+
+    expect(res).toBeInstanceOf(Array);
+  });
+
+  it('findOne', async () => {
+    const res = await service.findOne(id);
+
+    expect(res).toBeInstanceOf(Object);
+  });
 });

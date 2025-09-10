@@ -9,8 +9,8 @@ export class TagService {
   create(createTagDto: CreateTagDto) {
     return prisma.tag.create({
       data: {
-        name: createTagDto.name
-      }
+        name: createTagDto.name,
+      },
     });
   }
 
@@ -19,21 +19,30 @@ export class TagService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} tag`;
+    return prisma.tag.findUniqueOrThrow({
+      where: {
+        id,
+      },
+    });
   }
 
   update(id: number, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`;
+    return prisma.tag.update({
+      where: {
+        id,
+      },
+      data: updateTagDto,
+    });
   }
 
   remove(id: number) {
     return `This action removes a #${id} tag`;
   }
 
-  findOneWhere(where:Prisma.TagWhereUniqueInput){
-    console.log({where})
+  findOneWhere(where: Prisma.TagWhereUniqueInput) {
+    console.log({ where });
     return prisma.tag.findUnique({
-      where
-    })
+      where,
+    });
   }
 }
