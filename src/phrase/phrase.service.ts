@@ -6,6 +6,7 @@ import { translate } from '@/utils/translate';
 import { elevenLabs } from '@/utils/eleven-labs';
 import { TagService } from '@/tag/tag.service';
 import { Prisma } from '@prisma/client';
+import { env } from '@/utils/env';
 
 @Injectable()
 export class PhraseService {
@@ -56,8 +57,23 @@ export class PhraseService {
     });
   }
 
-  findAll() {
-    return prisma.phrase.findMany();
+  async findAll() {
+    const res = await prisma.phrase.findMany({
+      omit: {
+        audio: true,
+      },
+    });
+
+    const baseUrl = env.BASE_URL_API.includes('https')
+      ? env.BASE_URL_API
+      : env.BASE_URL_API.concat(':').concat(env.PORT.toString());
+
+    return res.map((row) => {
+      return {
+        ...row,
+        audio: `${baseUrl}/phrases/${row.id}/audio.mp3`,
+      };
+    });
   }
 
   findOne(id: number) {

@@ -13,7 +13,7 @@ import { CreatePhraseDto } from './dto/create-phrase.dto';
 import { UpdatePhraseDto } from './dto/update-phrase.dto';
 import { Response } from 'express';
 
-@Controller('phrase')
+@Controller('phrases')
 export class PhraseController {
   constructor(private readonly phraseService: PhraseService) {}
 

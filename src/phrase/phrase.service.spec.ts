@@ -3,6 +3,7 @@ import { PhraseService } from './phrase.service';
 import { CreatePhraseDto } from './dto/create-phrase.dto';
 import { plainToInstance } from 'class-transformer';
 import { TagService } from '@/tag/tag.service';
+import { env } from 'process';
 
 describe('PhraseService', () => {
   let service: PhraseService;
@@ -16,9 +17,9 @@ describe('PhraseService', () => {
     service = module.get<PhraseService>(PhraseService);
   });
 
-  it.only('upsert', async () => {
+  it('upsert', async () => {
     const payload: CreatePhraseDto = {
-      portuguese: 'Bom tarde!',
+      portuguese: 'eu como pão.',
       tag: 'test',
     };
 
@@ -33,6 +34,10 @@ describe('PhraseService', () => {
 
   it('findAll', async () => {
     const res = await service.findAll();
+
+    for (const row of res) {
+      expect(row.audio).toContain(env.BASE_URL_API);
+    }
 
     expect(res).toBeInstanceOf(Array);
   });
