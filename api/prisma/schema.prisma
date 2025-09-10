@@ -18,6 +18,7 @@ model Phrase {
   id         Int         @id @default(autoincrement())
   portuguese String      @unique
   english    String      @unique
+  audio      Bytes
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   tags       PhraseTag[]

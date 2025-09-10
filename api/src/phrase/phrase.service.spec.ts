@@ -1,38 +1,48 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PhraseService } from './phrase.service';
 import { CreatePhraseDto } from './dto/create-phrase.dto';
+import { plainToInstance } from 'class-transformer';
+import { TagService } from '@/tag/tag.service';
 
 describe('PhraseService', () => {
   let service: PhraseService;
-  let id: number;
+  let id = 1;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PhraseService],
+      providers: [PhraseService, TagService],
     }).compile();
 
     service = module.get<PhraseService>(PhraseService);
 
+  });
+
+  it('upsert', async () => {
+
     const payload: CreatePhraseDto = {
-      portuguese: 'Bom dia!',
-      tag: 'test2'
+      portuguese: 'Bom tarde!',
+      tag: 'test'
     }
-    const res = await service.create(payload)
 
-    id = res.id
-    console.log(res);
+    const dto = plainToInstance(CreatePhraseDto, payload)
 
-  });
+    const res = await service.upsert(dto)
 
-  // afterAll(async () => {
-  //   await service.remove(id)
-  // } )
+    expect(res).toMatchObject(dto)
 
-  it('findOne', async () => {
+  })
 
-    const res = await service.findOne(id)
+  it('findAll', async () => {
 
-    console.log(res)
+    const res = await service.findAll()
+
+    expect(res).toBeInstanceOf(Array)
 
   });
+
+
+  it.only('findOneAudio', async () => {
+
+    const res = await service.findOneAudio(id)
+  })
 });
