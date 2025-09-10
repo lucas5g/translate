@@ -24,9 +24,6 @@ export async function elevenLabs(text: string) {
   for await (const chunk of audio) {
     audioChunks.push(chunk);
   }
-
-  console.log('oioite');
-
   const audioBuffer = Buffer.concat(audioChunks);
 
   return audioBuffer;

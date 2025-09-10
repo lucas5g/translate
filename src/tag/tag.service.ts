@@ -40,7 +40,6 @@ export class TagService {
   }
 
   findOneWhere(where: Prisma.TagWhereUniqueInput) {
-    console.log({ where });
     return prisma.tag.findUnique({
       where,
     });
